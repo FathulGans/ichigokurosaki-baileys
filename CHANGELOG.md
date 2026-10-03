@@ -2,10 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
 ## [1.1.41]
 
+### Changed
+- **`WAProto/index.js` diganti total** dengan hasil generate yang lebih baru: 361 tipe (sebelumnya 202). Berisi tipe baru untuk bot/AI, derivasi kunci Signal, backup, dan consumer-application. `WAProto/index.d.ts` juga diganti dengan hasil generate yang cocok.
+- `LIDMigrationMapping` & `LIDMigrationMappingSyncPayload` dikembalikan dari Baileys rc14 (dibutuhkan `process-message.js` untuk sync mapping LID).
+
 ### Added
-- **`recipientOverrides` option on `sendMessage()`** (experimental) — `sock.sendMessage(jid, content, { recipientOverrides: [{ jid, message }, ...] })`, where `message` is a raw `WAMessageContent` object (e.g. `{ conversation: "..." }`), passed straight through to `relayMessage()`. The main `content` still goes to `jid` exactly as before (no change to the default send path); each `{ jid, message }` pair additionally gets its own separate, personal message. Group broadcasts use a single shared sender-key ciphertext for every participant, so there's no protocol-level way to vary content per member inside one group send — overrides are delivered as separate personal messages instead. Same caution as `specificRecipient`: experimental, avoid continuous/frequent use, may cause session instability. Only wired into `sendMessage()` for now, not the other `send*` helpers.
+- **Hook `recipientFilter`** di `relayMessage` dan `sendMessage`: `(jid, { user, isMe }) => boolean`. Kembalikan `false` untuk melewati device tertentu saat enkripsi/pengiriman. Opsional, perilaku default tidak berubah.
+
+### Notes
+- Jangan jalankan `npm run build:proto`: itu menimpa `index.js` baru dengan proto lama. `WAProto.proto` belum disinkronkan dengan `index.js` baru.
+- Belum diuji di akun WhatsApp sungguhan.
 
 ## [1.1.40]
 
