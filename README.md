@@ -24,13 +24,15 @@ It ships compiled runtime files in `lib/` and protobuf artifacts in `WAProto/`, 
 
 ## 🆕 Changelog / Updates
 
-**Unreleased**
+**v1.1.42**
+
+- **Changed:** `WAProto/index.js` (and `index.d.ts`) replaced with a newer generated build: 361 types (previously 202), including new types for bot/AI, Signal key derivation, backup and consumer-application. `LIDMigrationMapping` & `LIDMigrationMappingSyncPayload` were restored from Baileys rc14 because `process-message.js` needs them.
+- **Added:** `recipientFilter` option in `sendMessage()`/`relayMessage()` — `(jid, { user, isMe }) => boolean`; return `false` to skip a device when encrypting/sending. Optional; default behavior is unchanged. See [7. Filtering Recipient Devices](#7-filtering-recipient-devices).
+- **Note:** don't run `npm run build:proto` — it would overwrite the new `index.js` with the old proto. `WAProto.proto` is not yet synced with the new `index.js`.
 
 **v1.1.41**
 
-- **Changed:** `WAProto/index.js` (and `index.d.ts`) replaced with a newer generated build: 361 types (previously 202), including new types for bot/AI, Signal key derivation, backup and consumer-application. `LIDMigrationMapping` & `LIDMigrationMappingSyncPayload` were restored from Baileys rc14 because `process-message.js` needs them.
-- **Added:** `recipientFilter` option in `sendMessage()`/`relayMessage()` — `(jid, { user, isMe }) => boolean`; return `false` to skip a device when encrypting/sending. Optional; default behavior is unchanged.
-- **Note:** don't run `npm run build:proto` — it would overwrite the new `index.js` with the old proto. `WAProto.proto` is not yet synced with the new `index.js`.
+- **Added:** `recipientOverrides` option on `sendMessage()` (experimental) — `sock.sendMessage(jid, content, { recipientOverrides: [{ jid, message }, ...] })`, where `message` is a raw `WAMessageContent` object (e.g. `{ conversation: "..." }`). The main `content` still goes to `jid` exactly as before; each `{ jid, message }` pair additionally gets its own separate, personal message, since group broadcasts share one ciphertext for everyone and can't vary content per member natively. Same caution as `specificRecipient` below — experimental, avoid continuous/frequent use. See [6.1 Per-Recipient Content Overrides](#61-per-recipient-content-overrides).
 
 **v1.1.40**
 
@@ -427,11 +429,38 @@ await sock.sendMessage(groupJid, { text: "Hey, just you two" }, {
 - Has no effect on 1:1 chats — the destination jid is already the sole recipient.
 - If the target is `status@broadcast`, it's treated as an extra viewer list and the stanza gets an `audience: "only"` attribute.
 
+### 6.1 Per-Recipient Content Overrides
+
+`sendMessage()` also accepts `recipientOverrides`: an array of `{ jid, message }` pairs for sending different content to specific people, alongside a normal (group or 1:1) send. Note `message` here is a raw `WAMessageContent` object (e.g. `{ conversation: "..." }`), not the friendly `sendMessage()` shorthand (e.g. `{ text: "..." }`) — it's passed straight through to `relayMessage()`.
+
+```js
+await sock.sendMessage(groupJid, { text: "Hi everyone!" }, {
+  recipientOverrides: [
+    {
+      jid: userJid,
+      message: { conversation: "🔒 This text only shown on specific user" },
+    },
+  ],
+});
+```
+
+- The main `content` still goes out to `jid` exactly as normal — this option never changes that send.
+- Each `jid` in `recipientOverrides` instead receives its own separate, personal message built from its own `message`.
+- WhatsApp group messages are encrypted once for the whole group (sender-key), so there's no protocol-level way to give individual members different content *inside* one group broadcast — that's why overrides are delivered as separate personal messages rather than folded into the group send.
+
+> [!CAUTION]
+> **Experimental Features:** `recipientOverrides` and `specificRecipient` are still experimental and strongly discouraged for continuous or frequent use. These features may cause session instability or potentially break/corrupt the Baileys session, especially when used excessively.
+>
+> Please use these features only when necessary and at your own risk. If these features are found to cause widespread or significant issues, they may be removed or withdrawn in a future release.
+
+> [!NOTE]
+> Currently only available on `sendMessage()`. The other helpers in [📨 Sending Messages](#sending-messages) (`sendTable`, `sendList`, `sendCodeBlock`, `sendLink`, `sendRichMessage`, etc.) don't accept `recipientOverrides` yet.
+
 ---
 
 ### 7. Filtering Recipient Devices
 
-Added in `v1.1.41`: decide per device whether it should receive the message.
+Added in `v1.1.42`: decide per device whether it should receive the message.
 
 ```js
 await sock.sendMessage(jid, { text: "Hello" }, {

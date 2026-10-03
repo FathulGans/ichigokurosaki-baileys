@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-## [1.1.41]
+## [1.1.42]
 
 ### Changed
 - **`WAProto/index.js` diganti total** dengan hasil generate yang lebih baru: 361 tipe (sebelumnya 202). Berisi tipe baru untuk bot/AI, derivasi kunci Signal, backup, dan consumer-application. `WAProto/index.d.ts` juga diganti dengan hasil generate yang cocok.
@@ -16,6 +16,11 @@ All notable changes to this project will be documented in this file.
 ### Notes
 - Jangan jalankan `npm run build:proto`: itu menimpa `index.js` baru dengan proto lama. `WAProto.proto` belum disinkronkan dengan `index.js` baru.
 - Belum diuji di akun WhatsApp sungguhan.
+
+## [1.1.41]
+
+### Added
+- **`recipientOverrides`** (eksperimental) di `sendMessage()`: `{ jid, message }[]` untuk mengirim pesan personal terpisah ke penerima tertentu di samping kiriman utama. Lihat README 6.1.
 
 ## [1.1.40]
 

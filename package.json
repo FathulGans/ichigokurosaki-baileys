@@ -1,7 +1,7 @@
 {
   "name": "cloud-baileys",
   "type": "module",
-  "version": "1.1.41",
+  "version": "1.1.42",
   "description": "Modded Baileys v7 with interactive message, album, newsletter, and VoIP support",
   "license": "MIT",
   "author": "Kaze (https://github.com/FathulGans)",
