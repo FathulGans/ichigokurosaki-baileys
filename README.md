@@ -1,11 +1,11 @@
 <div align="center">
 
-<img src="https://kappa.lol/37E1ES" alt="cloud-baileys banner" width="100%" />
+<img src="https://kappa.lol/37E1ES" alt="ichigokurosaki-baileys banner" width="100%" />
 
 ### Modded Baileys — Interactive Messages, AI Rich Responses, Albums & More
 
-[![npm version](https://img.shields.io/npm/v/cloud-baileys?color=CB3837&logo=npm&logoColor=white&style=for-the-badge)](https://www.npmjs.com/package/cloud-baileys)
-[![npm downloads](https://img.shields.io/npm/dm/cloud-baileys?color=CB3837&logo=npm&logoColor=white&style=for-the-badge)](https://www.npmjs.com/package/cloud-baileys)
+[![npm version](https://img.shields.io/npm/v/ichigokurosaki-baileys?color=CB3837&logo=npm&logoColor=white&style=for-the-badge)](https://www.npmjs.com/package/ichigokurosaki-baileys)
+[![npm downloads](https://img.shields.io/npm/dm/ichigokurosaki-baileys?color=CB3837&logo=npm&logoColor=white&style=for-the-badge)](https://www.npmjs.com/package/ichigokurosaki-baileys)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%3E%3D20.0.0-339933?logo=node.js&logoColor=white&style=for-the-badge)](https://nodejs.org)
 [![ESM](https://img.shields.io/badge/ESM-only-F7DF1E?logo=javascript&logoColor=black&style=for-the-badge)](#)
@@ -15,7 +15,7 @@
 **A modded build of [WhiskeySockets/Baileys](https://github.com/WhiskeySockets/Baileys)**
 with native support for interactive messages, album messages, unified rich responses, newsletter helpers, status mentions, and additional business/community utilities.
 
-This repository is a **distribution/build repo** for `cloud-baileys`.
+This repository is a **distribution/build repo** for `ichigokurosaki-baileys`.
 It ships compiled runtime files in `lib/` and protobuf artifacts in `WAProto/`, and is intended to be consumed directly from npm or as a vendored dependency inside the **Cloud-MD** ecosystem.
 
 </div>
@@ -119,7 +119,7 @@ It ships compiled runtime files in `lib/` and protobuf artifacts in `WAProto/`, 
 
 **v1.0.0**
 
-- Initial release of `cloud-baileys`, a rebranded and maintained build based on a modded Baileys v7 core.
+- Initial release of `ichigokurosaki-baileys`, a rebranded and maintained build based on a modded Baileys v7 core.
 - Built-in support for interactive messages, album messages, unified rich responses, newsletter helpers, and status mentions.
 - Built-in VoIP (Voice Call) engine — full integration of WebRTC and WASM to enable native WhatsApp voice calling, no separate package needed.
 - Robust handling for View Once messages (`viewOnceMessageV3` & `ptvMessage`) to avoid socket crashes when media content isn't available.
@@ -132,7 +132,7 @@ It ships compiled runtime files in `lib/` and protobuf artifacts in `WAProto/`, 
 - **Example Usage:**
 
   ```javascript
-  import { ORich } from 'cloud-baileys';
+  import { ORich } from 'ichigokurosaki-baileys';
 
   const cloud = new ORich(sock)
     .addText('Hello from ORich AI!')
@@ -145,7 +145,7 @@ It ships compiled runtime files in `lib/` and protobuf artifacts in `WAProto/`, 
 
 ## Table of Contents
 
-- [cloud-baileys](#cloud-baileys)
+- [ichigokurosaki-baileys](#ichigokurosaki-baileys)
   - [Modded Baileys v7 — Interactive Messages, AI Rich Responses, Albums & More](#modded-baileys-v7--interactive-messages-ai-rich-responses-albums--more)
   - [Table of Contents](#table-of-contents)
   - [✨ Features](#-features)
@@ -224,7 +224,7 @@ It ships compiled runtime files in `lib/` and protobuf artifacts in `WAProto/`, 
   - `sharp`, `jimp`, `audio-decode`, `link-preview-js` for optional media/rich utilities
 
 > [!IMPORTANT]
-> `cloud-baileys` is **ESM-only**. CommonJS projects will need migration or dynamic import wrappers.
+> `ichigokurosaki-baileys` is **ESM-only**. CommonJS projects will need migration or dynamic import wrappers.
 
 ---
 
@@ -250,7 +250,7 @@ If you are documenting or integrating this project, treat `lib/index.js` and `li
 ### From NPM
 
 ```bash
-npm install cloud-baileys
+npm install ichigokurosaki-baileys
 ```
 
 Recommended companion packages for examples in this README:
@@ -266,7 +266,7 @@ Add to `package.json`:
 ```json
 {
   "dependencies": {
-    "cloud": "npm:cloud-baileys@latest"
+    "cloud": "npm:ichigokurosaki-baileys@latest"
   }
 }
 ```
@@ -301,18 +301,18 @@ Ensure `package.json` has `"type": "module"`:
   "name": "my-bot",
   "type": "module",
   "dependencies": {
-    "cloud": "npm:cloud-baileys@latest"
+    "cloud": "npm:ichigokurosaki-baileys@latest"
   }
 }
 ```
 
 > [!IMPORTANT]
-> **Required**: `"type": "module"` — cloud-baileys is ESM-only. Without this, imports will fail.
+> **Required**: `"type": "module"` — ichigokurosaki-baileys is ESM-only. Without this, imports will fail.
 
 ### 2. Install Dependencies
 
 ```bash
-npm install cloud-baileys pino qrcode-terminal
+npm install ichigokurosaki-baileys pino qrcode-terminal
 ```
 
 ### 3. Create `index.js`
@@ -322,7 +322,7 @@ import makeWASocket, {
   useMultiFileAuthState,
   DisconnectReason,
   Browsers,
-} from "cloud-baileys";
+} from "ichigokurosaki-baileys";
 import pino from "pino";
 import qrcode from "qrcode-terminal";
 
@@ -383,7 +383,7 @@ Scan the QR code, wait until the socket reaches `connection: "open"`, then send 
 If you prefer pairing code over QR:
 
 ```js
-import { fetchLatestWaWebVersion } from "cloud-baileys";
+import { fetchLatestWaWebVersion } from "ichigokurosaki-baileys";
 
 // WhatsApp rotates its web build number frequently. Fetching it live avoids
 // "Couldn't link device — An error occurred" caused by a stale bundled default.
@@ -575,7 +575,7 @@ console.log("Pairing code:", code); // e.g. "A1B2-C3D4"
 **Authentication State:**
 
 ```js
-import { useMultiFileAuthState } from "cloud-baileys";
+import { useMultiFileAuthState } from "ichigokurosaki-baileys";
 
 const { state, saveCreds } = await useMultiFileAuthState("./session");
 // state.creds → credentials (me, platform, noise keys, etc.)
@@ -590,7 +590,7 @@ import {
   BufferJSON,
   initAuthCreds,
   makeCacheableSignalKeyStore,
-} from "cloud-baileys";
+} from "ichigokurosaki-baileys";
 
 const credsStore = new Map();
 const keyStoreData = new Map();
@@ -649,7 +649,7 @@ import {
   DisconnectReason,
   fetchLatestBaileysVersion,
   makeCacheableSignalKeyStore,
-} from "cloud-baileys";
+} from "ichigokurosaki-baileys";
 
 const { version, isLatest } = await fetchLatestBaileysVersion();
 console.log(version, isLatest);
@@ -659,12 +659,12 @@ console.log(version, isLatest);
 
 ### VoIP (Voice Calls)
 
-Modul VoIP kini terintegrasi langsung di `cloud-baileys` menggunakan `VoipClient` dan memanfaatkan *shared socket* (tanpa double pairing). Aset WebAssembly sudah built-in.
+Modul VoIP kini terintegrasi langsung di `ichigokurosaki-baileys` menggunakan `VoipClient` dan memanfaatkan *shared socket* (tanpa double pairing). Aset WebAssembly sudah built-in.
 
 **Inisiasi VoIP Client:**
 
 ```js
-import { VoipClient, CallState } from "cloud-baileys";
+import { VoipClient, CallState } from "ichigokurosaki-baileys";
 
 // Lakukan ini SETELAH connection === "open"
 if (!global.voipClient) {
@@ -1145,13 +1145,13 @@ await sock.sendLinkV2(
   "Search results:\n- {{IE_0}}Official docs{{/IE_0}}\n- {{IE_1}}GitHub repo{{/IE_1}}",
   [
     {
-      url: "https://www.npmjs.com/package/cloud-baileys",
+      url: "https://www.npmjs.com/package/ichigokurosaki-baileys",
       displayName: "Official docs",
       sourceDisplayName: "npm",
       sourceSubtitle: "package registry",
     },
     {
-      url: "https://github.com/FathulGans/cloud-baileys",
+      url: "https://github.com/FathulGans/ichigokurosaki-baileys",
       displayName: "GitHub repo",
       sourceDisplayName: "github",
       sourceSubtitle: "source hosting",
@@ -1159,7 +1159,7 @@ await sock.sendLinkV2(
   ],
   quoted,
   {
-    headerText: "cloud-baileys",
+    headerText: "ichigokurosaki-baileys",
     footer: "Reference links",
     searchEngine: "MAME",
   },
@@ -1728,7 +1728,7 @@ import {
 
   // Types
   WASocket,
-} from "cloud-baileys";
+} from "ichigokurosaki-baileys";
 ```
 
 > [!NOTE]
@@ -1770,7 +1770,7 @@ This runs the smoke tests in `test/` using Node's built-in test runner (`node --
 
 ## 🔀 Differences from Official Baileys
 
-| Area                 | Official Baileys v7 | cloud-baileys                            |
+| Area                 | Official Baileys v7 | ichigokurosaki-baileys                            |
 | -------------------- | ------------------- | ---------------------------------------- |
 | Interactive messages | No native support   | Full support via Dugong                  |
 | Album messages       | Not supported       | Multi-media albums                       |
@@ -1806,7 +1806,7 @@ This runs the smoke tests in `test/` using Node's built-in test runner (`node --
 
 ## 🙏 Credits
 
-`cloud-baileys` is built on top of [WhiskeySockets/Baileys](https://github.com/WhiskeySockets/Baileys), the open-source WhatsApp Web API library. This package is a modded/rebranded distribution with additional features (interactive messages, VoIP, AI Rich responses, and more) layered on top of that core.
+`ichigokurosaki-baileys` is built on top of [WhiskeySockets/Baileys](https://github.com/WhiskeySockets/Baileys), the open-source WhatsApp Web API library. This package is a modded/rebranded distribution with additional features (interactive messages, VoIP, AI Rich responses, and more) layered on top of that core.
 
 ## 📄 License
 
@@ -1821,6 +1821,6 @@ MIT © [Kaze](https://github.com/FathulGans)
 
 **Made by Kaze**
 
-[⭐ Star this repo](https://github.com/FathulGans/cloud-baileys) · [🐛 Report Bug](https://github.com/FathulGans/cloud-baileys/issues)
+[⭐ Star this repo](https://github.com/FathulGans/ichigokurosaki-baileys) · [🐛 Report Bug](https://github.com/FathulGans/ichigokurosaki-baileys/issues)
 
 </div>

@@ -1,17 +1,17 @@
 {
-  "name": "cloud-baileys",
+  "name": "ichigokurosaki-baileys",
   "type": "module",
-  "version": "1.1.42",
+  "version": "1.0.0",
   "description": "Modded Baileys v7 with interactive message, album, newsletter, and VoIP support",
   "license": "MIT",
   "author": "Kaze (https://github.com/FathulGans)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FathulGans/cloud-baileys.git"
+    "url": "git+https://github.com/FathulGans/ichigokurosaki-baileys.git"
   },
-  "homepage": "https://github.com/FathulGans/cloud-baileys#readme",
+  "homepage": "https://github.com/FathulGans/ichigokurosaki-baileys#readme",
   "bugs": {
-    "url": "https://github.com/FathulGans/cloud-baileys/issues"
+    "url": "https://github.com/FathulGans/ichigokurosaki-baileys/issues"
   },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
