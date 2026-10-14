@@ -24,6 +24,16 @@ It ships compiled runtime files in `lib/` and protobuf artifacts in `WAProto/`, 
 
 ## 🆕 Changelog / Updates
 
+**v1.1.0**
+
+- **Changed:** `message_builder.js` upgraded from `4.6` to `4.7` (`lib/Modded/message_builder.js`).
+- **Added:** `loadFrom(msg)` on `Button`, `ButtonV2`, `Carousel` and `AIRich` — rebuild a builder from an existing message so you can edit and resend it.
+- **Added:** `AIRich` item ids and editing — `id` / `replace` / `insertAt` options on every `add*` method, plus `hasId()` / `getIds()` and typed errors (`AIRichError`, `ItemNotFoundError`, `DuplicateIdError`, `InvalidTargetError`, `ContentValidationError`).
+- **Added:** `AIRich` options `dynamic` and `unsupportedTypeAlert`, response id helpers (`setResponseId`, `refreshResponseId`, `setBotResponseId`, `refreshBotResponseId`), and `Toolkit.stringifyEscaped()`.
+- **Added:** `ButtonV2.setRawThumbnail()`; `build()` / `send()` now accept `messageId`, and `send()` accepts `additionalNodes`.
+- **Changed:** `Button.addSelection(title, options)` now puts `options` inside the select params instead of the button object.
+- **Kept:** `RowBuilder` / `CardBuilder` (`row()`, `card()`), the short aliases (`text`, `footer`, `title`, `subtitle`, `image`, `button`), `setVideo()`, `ORich`, and optional `sharp` / `fluent-ffmpeg` loading. `Carousel.build()` stays async.
+
 **v1.1.42**
 
 - **Changed:** `WAProto/index.js` (and `index.d.ts`) replaced with a newer generated build: 361 types (previously 202), including new types for bot/AI, Signal key derivation, backup and consumer-application. `LIDMigrationMapping` & `LIDMigrationMappingSyncPayload` were restored from Baileys rc14 because `process-message.js` needs them.

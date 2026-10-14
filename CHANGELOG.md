@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.1.0]
+
+### Changed
+- **`message_builder.js` dinaikkan dari 4.6 ke 4.7** (`lib/Modded/message_builder.js`).
+- `Button.addSelection(title, options)`: `options` sekarang masuk ke params `single_select` (bukan ke level button).
+
+### Added
+- **`loadFrom(msg)`** di `Button`, `ButtonV2`, `Carousel`, dan `AIRich` untuk membangun ulang builder dari pesan yang sudah ada.
+- **AIRich**: opsi `id` / `replace` / `insertAt` di semua method `add*`, `hasId()` / `getIds()`, error bertipe (`AIRichError`, `ItemNotFoundError`, `DuplicateIdError`, `InvalidTargetError`, `ContentValidationError`), opsi `dynamic` & `unsupportedTypeAlert`, dan helper response id (`setResponseId`, `refreshResponseId`, `setBotResponseId`, `refreshBotResponseId`).
+- `Toolkit.stringifyEscaped()`, `ButtonV2.setRawThumbnail()`, serta dukungan `messageId` di `build()`/`send()` dan `additionalNodes` di `send()`.
+
+### Notes
+- Customan lokal tetap dipertahankan: `RowBuilder`/`CardBuilder` (`row()`, `card()`), alias pendek (`text`, `footer`, `title`, `subtitle`, `image`, `button`), `setVideo()`, `ORich`, dan loading `sharp`/`fluent-ffmpeg` yang opsional. `Carousel.build()` tetap async.
+- Belum diuji jalan di akun WhatsApp sungguhan (baru cek syntax).
+
 ## [1.1.42]
 
 ### Changed
