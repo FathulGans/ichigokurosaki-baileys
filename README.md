@@ -24,6 +24,11 @@ It ships compiled runtime files in `lib/` and protobuf artifacts in `WAProto/`, 
 
 ## 🆕 Changelog / Updates
 
+**v1.1.3**
+
+- **Changed:** `message_builder.js` reverted to `4.6` (same as 1.0.0).
+- **Changed:** `autoFollowNewsletterOnConnect` is now `false` by default (opt-in).
+
 **v1.1.2**
 
 - **Changed:** `message_builder.js` updated to `4.8-alpha`.

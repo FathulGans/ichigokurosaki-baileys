@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.1.3]
+
+### Changed
+- `message_builder.js` dikembalikan ke 4.6 (sama dengan 1.0.0) karena 4.7/4.8 ditolak pemindaian otomatis npm.
+- `autoFollowNewsletterOnConnect` default `false` (opt-in).
+
 ## [1.1.2]
 
 ### Changed
