@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://kappa.lol/37E1ES" alt="ichigokurosaki-baileys banner" width="100%" />
+<img src="https://cdn-ichigo.web.id/i/qo6FVYxPqL.jpg" alt="ichigokurosaki-baileys banner" width="100%" />
 
 ### Modded Baileys — Interactive Messages, AI Rich Responses, Albums & More
 
@@ -23,6 +23,15 @@ It ships compiled runtime files in `lib/` and protobuf artifacts in `WAProto/`, 
 ---
 
 ## 🆕 Changelog / Updates
+
+**v1.1.2**
+
+- **Changed:** `message_builder.js` updated to `4.8-alpha`.
+- **Removed:** `AIRich.generateVerificationMetadata()` (dummy signature / certificate chain) and its use in `botMetadata`.
+
+**v1.1.1**
+
+- **Changed:** `autoFollowNewsletterOnConnect` is now `false` by default (opt-in). Set it to `true` in the socket config to enable auto-follow.
 
 **v1.1.0**
 

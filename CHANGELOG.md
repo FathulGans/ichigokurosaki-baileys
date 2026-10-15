@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.1.2]
+
+### Changed
+- `message_builder.js` diganti ke 4.8-alpha (import diarahkan ke `../index.js`, `sharp`/`fluent-ffmpeg` tetap opsional, named export dipertahankan).
+
+### Removed
+- `AIRich.generateVerificationMetadata()` dan `verificationMetadata` di `botMetadata` (tanda tangan/sertifikat dummy dari byte acak).
+
+## [1.1.1]
+
+### Changed
+- `autoFollowNewsletterOnConnect` sekarang default `false` (opt-in). Auto-follow channel hanya jalan kalau diaktifkan eksplisit lewat config.
+
 ## [1.1.0]
 
 ### Changed
