@@ -22,6 +22,8 @@ type EncryptGroupMessageOpts = {
     group: string;
     data: Uint8Array;
     meId: string;
+    /** paksa sender key baru (dari @levvsync/baileys) */
+    resetSenderKey?: boolean;
 };
 type PreKey = {
     keyId: number;

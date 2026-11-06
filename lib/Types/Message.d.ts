@@ -290,6 +290,33 @@ export type AnyRegularMessageContent = (
   ViewOnce;
 export type AnyMessageContent =
   | AnyRegularMessageContent
+  /** konten tambahan dari @levvsync/baileys (LevviSync, MIT) */
+  | {
+      /** AI rich response; editrich mengedit pesan setelah terkirim (delay dalam ms) */
+      richMessage: { [key: string]: any; editrich?: { delay?: number; [key: string]: any } };
+    }
+  | {
+      /** proto.IMessage mentah, dikirim apa adanya */
+      rawMessage: proto.IMessage;
+    }
+  | {
+      photoPoll: {
+        name: string;
+        values: { name: string; image: WAMediaUpload }[];
+        selectableCount?: number;
+        messageSecret?: Uint8Array;
+      };
+    }
+  | {
+      buttonLocation: {
+        text: string;
+        footer?: string;
+        title?: string;
+        address?: string;
+        thumbnail: string | Uint8Array;
+        buttons: { id: string; text: string; type?: "single_select"; params?: { [key: string]: any } }[];
+      };
+    }
   | {
       forward: WAMessage;
       force?: boolean;
@@ -326,6 +353,25 @@ export type MessageRelayOptions = MinimalRelayOptions & {
   useUserDevicesCache?: boolean;
   /** jid list of participants for status@broadcast */
   statusJidList?: string[];
+  /** tambah node <bot biz_bot="1"/> (dari @levvsync/baileys) */
+  ai?: boolean;
+};
+/** Opsi sendPrivateRelay (dari @levvsync/baileys, LevviSync, MIT) */
+export type PrivateRelayOptions = MinimalRelayOptions & {
+  additionalAttributes?: { [_: string]: string };
+  additionalNodes?: BinaryNode[];
+  ai?: boolean;
+  useUserDevicesCache?: boolean;
+  /** wajib untuk status@broadcast */
+  statusJidList?: string[];
+  /** "exclude" (default): semua kecuali target. "include": hanya target. */
+  mode?: "include" | "exclude";
+  /** nomor / JID PN / JID LID, opsional ":device" */
+  target?: string[];
+  targetMe?: boolean;
+  /** default true */
+  hideDecryptFail?: boolean;
+  deviceMode?: "all" | "primary" | "secondary";
 };
 export type MiscMessageGenerationOptions = MinimalRelayOptions & {
   /** optional, if you want to manually set the timestamp of the message */

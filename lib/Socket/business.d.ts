@@ -71,6 +71,12 @@ export declare const makeBusinessSocket: (config: SocketConfig) => {
       statusJidList,
     }: import("../index.js").MessageRelayOptions,
   ) => Promise<string>;
+  /** Relay proto.IMessage ke sebagian perangkat saja (dari @levvsync/baileys). Mengembalikan message id. */
+  sendPrivateRelay: (
+    jid: string,
+    message: import("../index.js").proto.IMessage,
+    options?: import("../Types/Message.js").PrivateRelayOptions,
+  ) => Promise<string>;
   sendReceipt: (
     jid: string,
     participant: string | undefined,

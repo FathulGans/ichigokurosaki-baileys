@@ -177,6 +177,12 @@ export declare const makeCommunitiesSocket: (config: SocketConfig) => {
       statusJidList,
     }: import("../Types/index.js").MessageRelayOptions,
   ) => Promise<string>;
+  /** Relay proto.IMessage ke sebagian perangkat saja (dari @levvsync/baileys). Mengembalikan message id. */
+  sendPrivateRelay: (
+    jid: string,
+    message: proto.IMessage,
+    options?: import("../Types/Message.js").PrivateRelayOptions,
+  ) => Promise<string>;
   sendReceipt: (
     jid: string,
     participant: string | undefined,

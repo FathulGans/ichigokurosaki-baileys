@@ -24,6 +24,15 @@ It ships compiled runtime files in `lib/` and protobuf artifacts in `WAProto/`, 
 
 ## 🆕 Changelog / Updates
 
+**v1.1.9**
+- New `sock.sendPrivateRelay()`: relay a raw message to only some devices (`include` / `exclude` by number, PN, LID or `:device`).
+- New `sendMessage` content: `richMessage` (with `editrich`), `rawMessage`, `photoPoll`, `buttonLocation`.
+- New `ai` option on `relayMessage()`; `encryptGroupMessage()` accepts `resetSenderKey`.
+- New `makeInMemoryStore()` export (needs `@adiwajshing/keyed-db`, now a dependency).
+- WAProto: `proto.Message.MediaKeyDomain`, `mediaKeyDomain` on media messages, `proto.BotAvatarMetadata`, `BotMetadata.avatarMetadata`.
+- WAProto updated to WhatsApp `2.3000.1053411851`: 44 new types, 92 new fields, 95 new enum values; nothing removed.
+- Existing send paths are unchanged.
+
 **v1.1.8**
 - `message_builder.js` → `4.8-alpha`: `AIRich` node system (`id` / `replace` / `insertAt`), `loadFrom()`, `buildEdit()` / `sendEdit()`, typed errors, new `add*` helpers.
 - WhatsApp Web version fetched live at import (fallback to bundled build); `getUrlInfo` redirect limit fixed; `downloadHistory` now streams; `close()` / `destroy()` cleanup on socket end.
@@ -54,6 +63,7 @@ It ships compiled runtime files in `lib/` and protobuf artifacts in `WAProto/`, 
     - [3. Create `index.js`](#3-create-indexjs)
     - [4. Run](#4-run)
     - [5. Pairing Code Example](#5-pairing-code-example)
+    - [8. Private Relay (Device Targeting)](#8-private-relay-device-targeting)
   - [🏗️ Architecture](#️-architecture)
     - [Socket Layer Chain](#socket-layer-chain)
     - [Key Modules](#key-modules)
@@ -68,6 +78,7 @@ It ships compiled runtime files in `lib/` and protobuf artifacts in `WAProto/`, 
     - [AI Rich Response Messages](#ai-rich-response-messages)
     - [Code Block V2 (Unified Response)](#code-block-v2-unified-response)
     - [Other Message Types](#other-message-types)
+    - [More Message Types (v1.1.9)](#more-message-types-v119)
     - [Newsletter Methods](#newsletter-methods)
     - [Group Methods](#group-methods)
     - [Community Methods](#community-methods)
@@ -102,6 +113,9 @@ It ships compiled runtime files in `lib/` and protobuf artifacts in `WAProto/`, 
 | **Communities & Groups**    | Community CRUD, linked groups, invite workflows, join approval, labels                 | ✅     |
 | **Status Mention**          | `sendStatusMention()` helper to mention users/groups in status flows                   | ✅     |
 | **LID & Session Handling**  | LID↔PN mapping, session migration, retry/session recreation helpers                    | ✅     |
+| **Private Relay**           | `sendPrivateRelay()` sends a raw message to selected devices only                      | ✅     |
+| **Image Poll / Location Buttons** | `photoPoll` and `buttonLocation` content in `sendMessage()`                      | ✅     |
+| **In-Memory Store**         | `makeInMemoryStore()` for chats, contacts, messages, labels                             | ✅     |
 | **Build Output Ready**      | Published runtime in `lib/` and protobuf artifacts in `WAProto/`                       | ✅     |
 | **TypeScript Declarations** | Included `.d.ts` files for exported APIs and socket methods                            | ✅     |
 
@@ -365,6 +379,39 @@ await sock.sendMessage(jid, { text: "Hello" }, {
 
 - `deviceJid` is the individual device JID; `isMe` is `true` for your own other devices.
 - Works for 1:1, group and status sends. If omitted, nothing changes.
+
+---
+
+### 8. Private Relay (Device Targeting)
+
+Added in `v1.1.9`: send a raw `proto.IMessage` to only some devices. Returns the message id.
+
+```js
+// every device except device 2 of 628xxx
+await sock.sendPrivateRelay("628xxx@s.whatsapp.net", { conversation: "Hello" }, {
+  mode: "exclude",        // "exclude" (default) | "include"
+  target: ["628xxx:2"],   // number, PN JID, LID JID, optional ":device"
+});
+
+// only the recipient's main phone
+await sock.sendPrivateRelay(jid, message, { mode: "include", target: ["628xxx"], deviceMode: "primary" });
+
+// group: the target member does not receive this message
+await sock.sendPrivateRelay("1203...@g.us", message, { target: ["628yyy"] });
+```
+
+| Option            | Default     | Description                                                     |
+| ----------------- | ----------- | --------------------------------------------------------------- |
+| `mode`            | `"exclude"` | `include` = only targets, `exclude` = everyone except targets   |
+| `target`          | `[]`        | Numbers / JIDs. PN ↔ LID aliases are matched too                |
+| `deviceMode`      | `"all"`     | `all`, `primary` (device 0), `secondary` (companion devices)     |
+| `targetMe`        | —           | `true` / `false` forces your own devices in or out              |
+| `hideDecryptFail` | `true`      | Adds `decrypt-fail="hide"`                                      |
+| `ai`              | `false`     | Adds `<bot biz_bot="1"/>`                                       |
+| `statusJidList`   | —           | Required for `status@broadcast`                                 |
+
+- Polls and events get their `<meta>` node automatically; buttons, lists, products, orders and `payment_key_info` get a `<biz>` node.
+- In groups a fresh sender key is used, then that group's `sender-key-memory` is cleared, so the next normal group message re-sends the sender key to every member.
 
 ---
 
@@ -1192,6 +1239,82 @@ await sock.sendRichMessage(
 | 7           | MAP           | `mapMetadata`          |
 | 8           | LATEX         | `latexMetadata`        |
 | 9           | CONTENT_ITEMS | `contentItemsMetadata` |
+
+---
+
+### More Message Types (v1.1.9)
+
+**Rich message (AI rich response):**
+
+```js
+await sock.sendMessage(jid, {
+  richMessage: {
+    title: "Answer",
+    text: "See [Google](https://google.com)",
+    code: { language: "javascript", code: "const a = 1" },
+    footer: "ichigokurosaki-baileys",
+    // optional: edit the message after it is sent
+    editrich: { delay: 2000, text: "Updated answer" },
+  },
+});
+```
+
+Other `richMessage` fields: `table`, `html`, `image`, `images`, `imageV2`, `video`, `productSingle`, `productMultiple`, `post`, `reels`, `hscroll`, `hscrollV2`, `footerActionV2`, `sources`, `suggestions`, `tip`, `inline_entities`, `response_id`.
+
+**Raw message** (sent as-is):
+
+```js
+await sock.sendMessage(jid, { rawMessage: { conversation: "raw text" } });
+```
+
+**Image poll:**
+
+```js
+await sock.sendMessage(jid, {
+  photoPoll: {
+    name: "Pick a menu",
+    selectableCount: 1,
+    values: [
+      { name: "Fried rice", image: { url: "./rice.jpg" } },
+      { name: "Noodles", image: { url: "./noodles.jpg" } },
+    ],
+  },
+});
+```
+
+**Buttons with a location header** (thumbnail is a URL or Buffer; needs the optional `jimp` package):
+
+```js
+await sock.sendMessage(jid, {
+  buttonLocation: {
+    text: "Our office",
+    footer: "ichigo",
+    title: "Head office",
+    address: "Example St. 1",
+    thumbnail: "https://example.com/map.jpg",
+    buttons: [
+      { id: "route", text: "Route" },
+      { id: "menu", text: "Menu", type: "single_select", params: { title: "Menu", sections: [] } },
+    ],
+  },
+});
+```
+
+**`ai` option on `relayMessage()`:**
+
+```js
+await sock.relayMessage(jid, message, { messageId, ai: true }); // adds <bot biz_bot="1"/>
+```
+
+**In-memory store:**
+
+```js
+import { makeInMemoryStore } from "ichigokurosaki-baileys";
+
+const store = makeInMemoryStore({});
+store.bind(sock.ev);
+store.writeToFile("./store.json");
+```
 
 ---
 

@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.9]
+- New `sock.sendPrivateRelay(jid, message, options)`: relay to selected devices only (`mode` include/exclude, `target` number/PN/LID/`:device`, `deviceMode` all/primary/secondary, `targetMe`, `ai`, `statusJidList`). Works for 1:1, groups, status and newsletters.
+- New `sendMessage` content: `richMessage` (AI rich response, `editrich` edits the message after sending), `rawMessage`, `photoPoll` (image poll), `buttonLocation` (buttons with a location header).
+- New `ai` option on `relayMessage()`; `signalRepository.encryptGroupMessage()` accepts `resetSenderKey`.
+- New export `makeInMemoryStore()`; added dependency `@adiwajshing/keyed-db`.
+- WAProto: `proto.Message.MediaKeyDomain`, `mediaKeyDomain` on audio/document/image/sticker/video/`MMSThumbnailMetadata`, `proto.BotAvatarMetadata` and `BotMetadata.avatarMetadata` (`index.js` and `WAProto.proto`).
+- WAProto updated to **WhatsApp 2.3000.1053411851** (was 2.3000.1038158069): 44 new types, 92 new fields, 95 new enum values (e.g. `Message.RequestLocationMessage`, `Message.RequestLocationUpdateMessage`, `Message.ChatAnimatedWallpaper`, `Message.MusicMessage.Lyrics`, `BotInterjectionMetadata`). Nothing was removed; `getTypeUrl()` is now on every type. `index.js`, `index.d.ts` and `WAProto.proto` are regenerated from one schema.
+- Existing `sendMessage` / `relayMessage` output is unchanged.
+
 ## [1.1.8]
 - `message_builder.js` → 4.8-alpha: `AIRich` rebuilt on a node system (`id` / `replace` / `insertAt`, typed errors, `loadFrom`, `buildEdit` / `sendEdit`); new `add*` helpers; `Button`, `ButtonV2`, `Carousel` get `loadFrom` and `messageId` support.
 - WhatsApp Web version fetched live at import, with fallback.
