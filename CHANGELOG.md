@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.12]
+- `sendMetaStep` fix: message is wrapped in `botForwardedMessage` (AI bot forwarded flag) and edits are sent as bot-forwarded edits, so the client shows the steps details instead of plain text and a duplicate message. Message text is the title of the last step.
+- New `meta.done(text)`; `meta.finish` is now an alias. `step()` / `done()` / `update()` return `{ key, editId, message }`.
+
 ## [1.1.11]
 - New `sock.sendMetaStep(jid, { title, body, disabled })` with `meta.step()`, `meta.finish()`, `meta.update()`: step/progress indicator message using `proto.BotProgressIndicatorMetadata`. Step status `PLANNED` / `EXECUTING` / `FINISHED`; options `reasoning`, `sections`, `sources`. Types `MetaStepInput` / `MetaStepHandle` added.
 

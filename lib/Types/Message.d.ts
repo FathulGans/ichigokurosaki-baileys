@@ -369,7 +369,7 @@ export type MetaStepInput = {
   sources?: { title?: string; url?: string }[];
   /** judul progres (progressDescription); default: title langkah pertama */
   description?: string;
-  /** teks pesan; default: description */
+  /** teks pesan; default: judul langkah terakhir */
   text?: string;
 };
 /** Hasil sendMetaStep. */
@@ -377,12 +377,21 @@ export type MetaStepHandle = {
   key: WAMessageKey;
   message: WAMessage;
   steps: any[];
-  /** kirim ulang (edit) pesan dengan daftar langkah saat ini */
-  update: () => Promise<WAMessage | undefined>;
+  /** kirim edit pesan dengan daftar langkah saat ini */
+  update: () => Promise<MetaStepEditResult>;
   /** langkah berikutnya; langkah lama jadi FINISHED kecuali { keepPrevious: true } */
-  step: (next: MetaStepInput, options?: { keepPrevious?: boolean }) => Promise<WAMessage | undefined>;
-  /** tandai semua langkah FINISHED, opsional tambah langkah penutup */
-  finish: (last?: MetaStepInput) => Promise<WAMessage | undefined>;
+  step: (next: MetaStepInput, options?: { keepPrevious?: boolean }) => Promise<MetaStepEditResult>;
+  /** semua langkah jadi FINISHED. String: teks pesan akhir. Objek: langkah penutup (title/body/text). */
+  done: (last?: string | MetaStepInput) => Promise<MetaStepEditResult>;
+  /** alias done */
+  finish: (last?: string | MetaStepInput) => Promise<MetaStepEditResult>;
+};
+/** Hasil edit sendMetaStep. */
+export type MetaStepEditResult = {
+  key: WAMessageKey;
+  /** id pesan edit yang dikirim */
+  editId: string;
+  message: proto.IMessage;
 };
 /** Opsi sendPrivateRelay (dari @levvsync/baileys, LevviSync, MIT) */
 export type PrivateRelayOptions = MinimalRelayOptions & {
