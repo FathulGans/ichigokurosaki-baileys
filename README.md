@@ -24,6 +24,9 @@ It ships compiled runtime files in `lib/` and protobuf artifacts in `WAProto/`, 
 
 ## 🆕 Changelog / Updates
 
+**v1.1.10**
+- WAProto updated to WhatsApp `2.3000.1054022738`: 9 new types, 16 new fields, 12 new enum values; nothing removed.
+
 **v1.1.9**
 - New `sock.sendPrivateRelay()`: relay a raw message to only some devices (`include` / `exclude` by number, PN, LID or `:device`).
 - New `sendMessage` content: `richMessage` (with `editrich`), `rawMessage`, `photoPoll`, `buttonLocation`.

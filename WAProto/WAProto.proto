@@ -1,7 +1,7 @@
 syntax = "proto3";
 package proto;
 
-/// WhatsApp Version: 2.3000.1053411851
+/// WhatsApp Version: 2.3000.1054022738
 
 message ADVDeviceIdentity {
     optional uint32 rawId = 1;
@@ -297,10 +297,16 @@ message AIThreadInfo {
 }
 
 message Account {
+    enum PnLearnState {
+        UNSET = 0;
+        SHARED = 1;
+        HIDDEN = 2;
+    }
     optional string lid = 1;
     optional string username = 2;
     optional string countryCode = 3;
     optional bool isUsernameDeleted = 4;
+    optional .proto.Account.PnLearnState pnLearnState = 6;
 }
 
 message AccountLinkingOpaqueData {
@@ -484,6 +490,9 @@ message BotCapabilityMetadata {
         AI_STUDY_QUIZ_ENABLED = 82;
         HATCH_CVM_ENABLED = 83;
         RICH_RESPONSE_SOCIAL_ENTITY_PREFETCH_SCHEDULER_ENABLED = 84;
+        AI_MUSE_JARVIS_EXTENDED_CARDS_ENABLED = 85;
+        AI_INTERJECTIONS_ENABLED = 86;
+        AI_RICH_RESPONSE_READ_ALOUD_ENABLED = 87;
     }
     repeated .proto.BotCapabilityMetadata.BotCapabilityType capabilities = 1;
 }
@@ -693,7 +702,6 @@ message BotMessageSharingInfo {
     optional uint32 forwardScore = 2;
 }
 
-// tambahan dari WAProto @levvsync/baileys (LevviSync, MIT)
 message BotAvatarMetadata {
     optional uint32 sentiment = 1;
     optional string behaviorGraph = 2;
@@ -746,7 +754,7 @@ message BotMetadata {
     optional .proto.BotPttPromptMetadata pttPromptMetadata = 42;
     optional .proto.BotHistoryShareMetadata botHistoryShareMetadata = 43;
     optional bytes internalMetadata = 999;
-    optional .proto.BotAvatarMetadata avatarMetadata = 1; // tambahan dari WAProto @levvsync/baileys (LevviSync, MIT)
+    optional .proto.BotAvatarMetadata avatarMetadata = 1;
     optional bool responseStoppedByUser = 44;
     optional .proto.BotInterjectionMetadata interjectionMetadata = 45;
 }
@@ -1234,6 +1242,7 @@ message ClientPairingProps {
     optional bytes subscriptionSyncPayload = 5;
     optional bool isBotJidDbMigrated = 6;
     optional bytes companionAddPeerPayload = 7;
+    optional bool isCompanionRegistrationFgsEnabled = 8;
 }
 
 message ClientPayload {
@@ -1332,6 +1341,7 @@ message ClientPayload {
             VR = 4;
             SMART_DISPLAY = 5;
             SMART_SPEAKER = 6;
+            AGENT = 7;
         }
         enum DistributionChannel {
             APPSTORE = 0;
@@ -1439,6 +1449,11 @@ message ClientPayload {
         optional string browserVersion = 6;
     }
 
+    message IntegrationAttestation {
+        optional string staticUnbound = 1;
+        optional string onlineSigned = 3;
+    }
+
     optional uint64 username = 1;
     optional bool passive = 3;
     optional .proto.ClientPayload.UserAgent userAgent = 5;
@@ -1476,6 +1491,7 @@ message ClientPayload {
     repeated string pairedPeripherals = 47 [packed = false];
     optional bytes testIsolationId = 48;
     optional int64 messageSts = 49;
+    optional .proto.ClientPayload.IntegrationAttestation integrationAttestation = 50;
 }
 
 message CoexStateSync {
@@ -1933,6 +1949,8 @@ message ContextInfo {
         AV1_VIDEO_CHILD = 10;
         STREAMED_VIDEO_PARENT = 11;
         STREAMED_VIDEO_CHILD = 12;
+        ORIGINAL_VIDEO_CHILD = 13;
+        ORIGINAL_IMAGE_CHILD = 14;
     }
     message PartiallySelectedContent {
         optional string text = 1;
@@ -2045,10 +2063,12 @@ message ContextInfo {
     optional string posterStatusId = 79;
     optional .proto.ContextInfo.InstagramThreadLink instagramThreadLink = 80;
     optional .proto.AIProvenance aiProvenance = 81;
-    repeated uint32 experienceIds = 82 [packed = true];
+    repeated uint32 experienceIds = 82;
     optional string partnerDeepLinkToken = 83;
     optional uint32 sourceExperienceId = 84;
-    repeated uint32 sourceExperienceIds = 85 [packed = true];
+    repeated uint32 sourceExperienceIds = 85;
+    optional bytes foaMutualsSignature = 86;
+    optional fixed32 forwardReachScore = 87;
 }
 
 message Conversation {
@@ -2129,6 +2149,7 @@ message Conversation {
     optional .proto.IdentityVerificationState identityVerification = 63;
     optional .proto.ACP2Setting acp2Setting = 64;
     optional bool acp2HistoryWithheld = 65;
+    repeated .proto.GroupRootKey groupRootKeys = 66;
 }
 
 message CreateBackupInput {
@@ -2371,7 +2392,7 @@ message DeviceCapabilities {
     }
 
     message HostWriteMutationSupport {
-        repeated string mutationNames = 1;
+        repeated string mutationNames = 1 [packed = false];
     }
 
     message NewsletterChatsMigration {
@@ -2388,6 +2409,10 @@ message DeviceCapabilities {
         repeated .proto.DeviceCapabilities.ReverseHistorySync.Product enabledProducts = 1;
     }
 
+    message PhoneNumberSharing {
+        optional bool phoneSharingSupported = 1;
+    }
+
     optional .proto.DeviceCapabilities.ChatLockSupportLevel chatLockSupportLevel = 1;
     optional .proto.DeviceCapabilities.LIDMigration lidMigration = 2;
     optional .proto.DeviceCapabilities.BusinessBroadcast businessBroadcast = 3;
@@ -2401,6 +2426,7 @@ message DeviceCapabilities {
     optional .proto.DeviceCapabilities.NewsletterChatsMigration newsletterChatsMigration = 11;
     optional .proto.DeviceCapabilities.HostWriteMutationSupport hostWriteMutationSupport = 12;
     optional .proto.DeviceCapabilities.BizAiWebOnboarding bizAiWebOnboarding = 13;
+    optional .proto.DeviceCapabilities.PhoneNumberSharing phoneNumberSharing = 14;
 }
 
 message DeviceConsistencyCodeMessage {
@@ -3492,6 +3518,7 @@ message MekBundle {
 message MemberLabel {
     optional string label = 1;
     optional int64 labelTimestamp = 2;
+    optional bool showAdminBadge = 3;
 }
 
 message Mention {
@@ -3566,7 +3593,7 @@ message Message {
         optional fixed32 backgroundArgb = 20;
         optional bool viewOnce = 21;
         optional string accessibilityLabel = 22;
-        optional .proto.Message.MediaKeyDomain mediaKeyDomain = 23; // tambahan dari WAProto @levvsync/baileys (LevviSync, MIT)
+        optional .proto.Message.MediaKeyDomain mediaKeyDomain = 23;
     }
 
     message BCallMessage {
@@ -3816,7 +3843,7 @@ message Message {
         optional uint32 thumbnailWidth = 19;
         optional string caption = 20;
         optional string accessibilityLabel = 21;
-        optional .proto.Message.MediaKeyDomain mediaKeyDomain = 22; // tambahan dari WAProto @levvsync/baileys (LevviSync, MIT)
+        optional .proto.Message.MediaKeyDomain mediaKeyDomain = 22;
     }
 
     message EncCommentMessage {
@@ -4114,7 +4141,7 @@ message Message {
         optional .proto.Message.ImageMessage.ImageSourceType imageSourceType = 31;
         optional string accessibilityLabel = 32;
         optional string qrUrl = 34;
-        optional .proto.Message.MediaKeyDomain mediaKeyDomain = 33; // tambahan dari WAProto @levvsync/baileys (LevviSync, MIT)
+        optional .proto.Message.MediaKeyDomain mediaKeyDomain = 33;
     }
 
     message InitialSecurityNotificationSettingSync {
@@ -4382,7 +4409,7 @@ message Message {
         optional int64 mediaKeyTimestamp = 5;
         optional uint32 thumbnailHeight = 6;
         optional uint32 thumbnailWidth = 7;
-        optional .proto.Message.MediaKeyDomain mediaKeyDomain = 8; // tambahan dari WAProto @levvsync/baileys (LevviSync, MIT)
+        optional .proto.Message.MediaKeyDomain mediaKeyDomain = 8;
     }
 
     message MarkAsVerifiedAction {
@@ -4966,6 +4993,9 @@ message Message {
             ACP2_SETTING = 39;
             SHARED_DEVICE_CONTACT_HASH_KEY_SHARE = 40;
             SHARED_DEVICE_CONTACT_HASH_KEY_REQUEST = 41;
+            GROUP_ROOT_KEY_REQUEST = 42;
+            MEMBERSHIP_FORM_KEY_FINGERPRINT_VERIFICATION = 43;
+            GROUP_ROOT_KEY_SHARE = 44;
         }
         optional .proto.MessageKey key = 1;
         optional .proto.Message.ProtocolMessage.Type type = 2;
@@ -5000,7 +5030,10 @@ message Message {
         optional .proto.ACP2Setting acp2Setting = 35;
         optional .proto.Message.SharedDeviceContactHashKeyShare sharedDeviceContactHashKeyShare = 36;
         optional .proto.Message.SharedDeviceContactHashKeyRequest sharedDeviceContactHashKeyRequest = 37;
-        repeated string additionalPromptIds = 38;
+        repeated string additionalPromptIds = 38 [packed = false];
+        optional .proto.GroupRootKeyRequest groupRootKeyRequest = 39;
+        optional .proto.MembershipFormKeyFingerprintVerification membershipFormKeyFingerprintVerification = 40;
+        optional .proto.GroupRootKeyShare groupRootKeyShare = 41;
     }
 
     message QuestionResponseMessage {
@@ -5194,7 +5227,7 @@ message Message {
         optional string accessibilityLabel = 22;
         optional int32 premium = 24;
         optional string emojis = 25;
-        optional .proto.Message.MediaKeyDomain mediaKeyDomain = 23; // tambahan dari WAProto @levvsync/baileys (LevviSync, MIT)
+        optional .proto.Message.MediaKeyDomain mediaKeyDomain = 23;
     }
 
     message StickerPackMessage {
@@ -5342,12 +5375,11 @@ message Message {
         optional uint64 motionPhotoPresentationOffsetMs = 29;
         optional string metadataUrl = 30;
         optional .proto.Message.VideoMessage.VideoSourceType videoSourceType = 31;
-        optional .proto.Message.MediaKeyDomain mediaKeyDomain = 32; // tambahan dari WAProto @levvsync/baileys (LevviSync, MIT)
+        optional .proto.Message.MediaKeyDomain mediaKeyDomain = 32;
         optional string dashManifestUrl = 33;
         optional int64 smartThumbnailTs = 34;
     }
 
-    // tambahan dari WAProto @levvsync/baileys (LevviSync, MIT)
     enum MediaKeyDomain {
         UNSET = 0;
         E2EE_CHAT = 1;
@@ -5396,6 +5428,39 @@ message Message {
 
     message SharedDeviceContactHashKeyShare {
         repeated .proto.Message.SharedDeviceContactHashKey keys = 1;
+    }
+
+    message PaymentDetailsMessage {
+        enum ServiceType {
+            UNKNOWN = 0;
+            UPI = 1;
+        }
+        enum Status {
+            STATUS_UNKNOWN = 0;
+            SUCCESS = 1;
+        }
+        optional .proto.Message.PaymentDetailsMessage.ServiceType serviceType = 1;
+        optional .proto.Money amount = 2;
+        optional string payeeName = 3;
+        optional string payerName = 4;
+        optional int64 transactionTimestampMs = 5;
+        optional string transactionId = 6;
+        optional .proto.Message.PaymentDetailsMessage.Status status = 7;
+        optional .proto.ContextInfo contextInfo = 17;
+    }
+
+    message VpcRequestMessage {
+        enum ScopeHint {
+            UNKNOWN = 0;
+            WA_ONLY = 1;
+            WAFFLE = 2;
+            WA_META_AI = 3;
+            META_AI_ONLY = 4;
+            FOA_ONLY = 5;
+        }
+        optional uint32 payloadSchemaVersion = 1;
+        optional string requestId = 2;
+        optional .proto.Message.VpcRequestMessage.ScopeHint scopeHint = 3;
     }
 
     optional string conversation = 1;
@@ -5516,6 +5581,9 @@ message Message {
     optional .proto.Message.RequestLocationMessage requestLocationMessage = 136;
     optional .proto.Message.FutureProofMessage botGroupParticipantMessage = 137;
     optional .proto.Message.RequestLocationUpdateMessage requestLocationUpdateMessage = 138;
+    optional .proto.Message.VpcRequestMessage vpcRequestMessage = 139;
+    optional .proto.Message.VideoMessage instantVideoMessage = 140;
+    optional .proto.Message.PaymentDetailsMessage paymentDetailsMessage = 141;
 }
 
 message MessageAddOn {
@@ -5567,6 +5635,8 @@ message MessageAssociation {
         POLL_ADD_OPTION = 20;
         AV1_VIDEO_DUAL_UPLOAD = 21;
         STREAMED_HD_VIDEO_DUAL_UPLOAD = 22;
+        ORIGINAL_VIDEO_DUAL_UPLOAD = 23;
+        ORIGINAL_IMAGE_DUAL_UPLOAD = 24;
     }
     optional .proto.MessageAssociation.AssociationType associationType = 1;
     optional .proto.MessageKey parentMessageKey = 2;
@@ -6687,7 +6757,14 @@ message StatusAttribution {
         STATUS_CLOSE_SHARING = 10;
         PAID_PARTNERSHIP = 11;
         USERNAME_STATUS = 12;
+        STATUS_TEMPLATES = 13;
     }
+    message StatusTemplate {
+        optional string templateId = 1;
+        optional string templateName = 2;
+        optional string thumbnailUrl = 3;
+    }
+
     oneof attributionData {
         .proto.StatusAttribution.StatusReshare statusReshare = 3;
         .proto.StatusAttribution.ExternalShare externalShare = 4;
@@ -6695,6 +6772,7 @@ message StatusAttribution {
         .proto.StatusAttribution.GroupStatus groupStatus = 6;
         .proto.StatusAttribution.RLAttribution rlAttribution = 7;
         .proto.StatusAttribution.AiCreatedAttribution aiCreatedAttribution = 8;
+        .proto.StatusAttribution.StatusTemplate statusTemplate = 9;
     }
     optional .proto.StatusAttribution.Type type = 1;
     optional string actionUrl = 2;
@@ -8184,6 +8262,7 @@ message WebMessageInfo {
     optional string decisionId = 82;
     repeated string decisionSources = 83 [packed = false];
     optional .proto.EventInviteAdditionalMetadata eventInviteAdditionalMetadata = 84;
+    optional uint64 groupHistoryLastCountedMessageTimestamp = 85;
 }
 
 message WebMessageInfoWithMessageBytes {
@@ -8255,7 +8334,7 @@ message BizAIMetadataSync {
 
 message BotInterjectionMetadata {
     optional string targetPromptMessageId = 1;
-    repeated string foldedPromptMessageIds = 2;
+    repeated string foldedPromptMessageIds = 2 [packed = false];
 }
 
 message EventInviteAdditionalMetadata {
@@ -8269,5 +8348,21 @@ message OmittedConversationMetadata {
     optional uint32 batchCount = 4;
     optional bool complete = 5;
     repeated .proto.Conversation conversations = 6;
+}
+
+message GroupRootKey {
+    optional string keyId = 1;
+    optional bytes rootKey = 2;
+    optional bool isCurrent = 3;
+}
+
+message GroupRootKeyRequest {
+    optional string keyId = 1;
+}
+
+message MembershipFormKeyFingerprintVerification {
+    optional string requestId = 1;
+    optional string keyId = 2;
+    optional bytes keyFingerprint = 3;
 }
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.1.10]
+- WAProto updated to **WhatsApp 2.3000.1054022738** (was 2.3000.1053411851): 9 new types, 16 new fields, 12 new enum values (e.g. `Message.VpcRequestMessage`, `Message.PaymentDetailsMessage`, `GroupRootKey`, `GroupRootKeyRequest`, `ClientPayload.IntegrationAttestation`, `StatusAttribution.StatusTemplate`, `Account.PnLearnState`). Nothing was removed; `index.js`, `index.d.ts` and `WAProto.proto` are regenerated from one schema.
+- `ChatSolidColorWallpaper.backgroundLightArgb` / `backgroundDarkArgb` are not added: field numbers 1 and 2 are already used by `colorLight` / `colorDark`.
+- Existing `sendMessage` / `relayMessage` output is unchanged.
+
 ## [1.1.9]
 - New `sock.sendPrivateRelay(jid, message, options)`: relay to selected devices only (`mode` include/exclude, `target` number/PN/LID/`:device`, `deviceMode` all/primary/secondary, `targetMe`, `ai`, `statusJidList`). Works for 1:1, groups, status and newsletters.
 - New `sendMessage` content: `richMessage` (AI rich response, `editrich` edits the message after sending), `rawMessage`, `photoPoll` (image poll), `buttonLocation` (buttons with a location header).
