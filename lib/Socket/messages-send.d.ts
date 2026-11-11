@@ -43,6 +43,12 @@ export declare const makeMessagesSocket: (config: SocketConfig) => {
       statusJidList,
     }: MessageRelayOptions,
   ) => Promise<string>;
+  /** Pesan dengan indikator langkah/progres AI (proto.BotProgressIndicatorMetadata). */
+  sendMetaStep: (
+    jid: string,
+    first: import("../Types/Message.js").MetaStepInput,
+    options?: { quoted?: WAMessage; estimatedCompletionTime?: number },
+  ) => Promise<import("../Types/Message.js").MetaStepHandle>;
   /** Relay proto.IMessage ke sebagian perangkat saja (dari @levvsync/baileys). Mengembalikan message id. */
   sendPrivateRelay: (
     jid: string,

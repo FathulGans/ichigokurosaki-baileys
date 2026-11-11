@@ -24,6 +24,9 @@ It ships compiled runtime files in `lib/` and protobuf artifacts in `WAProto/`, 
 
 ## 🆕 Changelog / Updates
 
+**v1.1.11**
+- New `sock.sendMetaStep(jid, { title, body, disabled })` with `meta.step()`, `meta.finish()`, `meta.update()`: step/progress indicator message (`proto.BotProgressIndicatorMetadata`).
+
 **v1.1.10**
 - WAProto updated to WhatsApp `2.3000.1054022738`: 9 new types, 16 new fields, 12 new enum values; nothing removed.
 
@@ -82,6 +85,7 @@ It ships compiled runtime files in `lib/` and protobuf artifacts in `WAProto/`, 
     - [Code Block V2 (Unified Response)](#code-block-v2-unified-response)
     - [Other Message Types](#other-message-types)
     - [More Message Types (v1.1.9)](#more-message-types-v119)
+    - [Step Planner (sendMetaStep)](#step-planner-sendmetastep)
     - [Newsletter Methods](#newsletter-methods)
     - [Group Methods](#group-methods)
     - [Community Methods](#community-methods)
@@ -1242,6 +1246,23 @@ await sock.sendRichMessage(
 | 7           | MAP           | `mapMetadata`          |
 | 8           | LATEX         | `latexMetadata`        |
 | 9           | CONTENT_ITEMS | `contentItemsMetadata` |
+
+---
+
+### Step Planner (sendMetaStep)
+
+Added in `v1.1.11`: a message with a step/progress indicator (`proto.BotProgressIndicatorMetadata`). Each step has a title, a body and a status: `PLANNED`, `EXECUTING` or `FINISHED`. The same message is edited each time a step is added.
+
+```js
+const meta = await sock.sendMetaStep(jid, { title: "Processing", body: "please wait", disabled: false });
+await meta.step({ title: "Step 2", body: "almost done" });
+await meta.finish({ title: "Done", body: "ok" });
+```
+
+- `disabled: true` makes the step `FINISHED` right away. Default is `false` (`EXECUTING`). `status: "PLANNED"` also works.
+- `meta.step()` marks older steps `FINISHED`, then adds the new one. Use `meta.step(x, { keepPrevious: true })` to leave older statuses as they are.
+- More step options: `reasoning`, `sections: [{ title, body }]`, `sources: [{ title, url }]`, `description`, `text`.
+- How the receiving client shows it is up to WhatsApp. The field is meant for AI bot replies, so display on a normal account is not guaranteed.
 
 ---
 

@@ -356,6 +356,34 @@ export type MessageRelayOptions = MinimalRelayOptions & {
   /** tambah node <bot biz_bot="1"/> (dari @levvsync/baileys) */
   ai?: boolean;
 };
+/** Input satu langkah untuk sendMetaStep. */
+export type MetaStepInput = {
+  title?: string;
+  body?: string;
+  /** true: langkah langsung berstatus FINISHED. Default false (EXECUTING). */
+  disabled?: boolean;
+  /** nama atau nilai enum PlanningStepStatus */
+  status?: "UNKNOWN" | "PLANNED" | "EXECUTING" | "FINISHED" | number;
+  reasoning?: boolean;
+  sections?: { title?: string; body?: string }[];
+  sources?: { title?: string; url?: string }[];
+  /** judul progres (progressDescription); default: title langkah pertama */
+  description?: string;
+  /** teks pesan; default: description */
+  text?: string;
+};
+/** Hasil sendMetaStep. */
+export type MetaStepHandle = {
+  key: WAMessageKey;
+  message: WAMessage;
+  steps: any[];
+  /** kirim ulang (edit) pesan dengan daftar langkah saat ini */
+  update: () => Promise<WAMessage | undefined>;
+  /** langkah berikutnya; langkah lama jadi FINISHED kecuali { keepPrevious: true } */
+  step: (next: MetaStepInput, options?: { keepPrevious?: boolean }) => Promise<WAMessage | undefined>;
+  /** tandai semua langkah FINISHED, opsional tambah langkah penutup */
+  finish: (last?: MetaStepInput) => Promise<WAMessage | undefined>;
+};
 /** Opsi sendPrivateRelay (dari @levvsync/baileys, LevviSync, MIT) */
 export type PrivateRelayOptions = MinimalRelayOptions & {
   additionalAttributes?: { [_: string]: string };
