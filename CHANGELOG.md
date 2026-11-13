@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.1.13]
+- `sendMetaStep` fix: v1.1.12 messages did not show up on the receiver. The message is no longer wrapped in `botForwardedMessage`; it is now an `extendedTextMessage` with the AI bot forwarded `contextInfo` (`forwardedAiBotMessageInfo`, `forwardOrigin: 4`) plus `botMetadata.progressIndicatorMetadata`.
+- Step edits go through `sendMessage({ edit })`, so the stanza has the `edit="1"` attribute (missing in v1.1.12).
+- `meta.done("text")`: `text` becomes `progressDescription`; the message text stays the last step title.
+
 ## [1.1.12]
 - `sendMetaStep` fix: message is wrapped in `botForwardedMessage` (AI bot forwarded flag) and edits are sent as bot-forwarded edits, so the client shows the steps details instead of plain text and a duplicate message. Message text is the title of the last step.
 - New `meta.done(text)`; `meta.finish` is now an alias. `step()` / `done()` / `update()` return `{ key, editId, message }`.

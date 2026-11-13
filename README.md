@@ -24,6 +24,9 @@ It ships compiled runtime files in `lib/` and protobuf artifacts in `WAProto/`, 
 
 ## 🆕 Changelog / Updates
 
+**v1.1.13**
+- `sendMetaStep` fix: v1.1.12 messages did not show up. No `botForwardedMessage` wrapper anymore; the text message carries the AI bot forwarded flag, and edits carry the `edit="1"` attribute.
+
 **v1.1.12**
 - `sendMetaStep` fix: message is wrapped in `botForwardedMessage` and edits are sent as bot-forwarded edits, so the client shows the steps details. New `meta.done(text)`.
 
@@ -1263,8 +1266,8 @@ await meta.done("done");
 ```
 
 - `disabled: true` makes the step `FINISHED` right away. Default is `false` (`EXECUTING`). `status: "PLANNED"` also works.
-- `meta.done(text)` marks every step `FINISHED` and sets the final message text. `meta.done({ title, body })` adds a closing step. `meta.finish` is an alias.
-- The message is sent like an AI bot reply (wrapped in `botForwardedMessage`), so the client shows "View details" with the steps list. Message text is the title of the last step.
+- `meta.done(text)` marks every step `FINISHED`; `text` becomes `progressDescription`, the message text stays the last step title. `meta.done({ title, body })` adds a closing step. `meta.finish` is an alias.
+- The message is a text message with the AI bot forwarded flag (`forwardedAiBotMessageInfo`), so the client shows "View details" with the steps list. Message text is the title of the last step. New steps are sent as normal edits (`edit="1"` attribute).
 - `meta.step()` marks older steps `FINISHED`, then adds the new one. Use `meta.step(x, { keepPrevious: true })` to leave older statuses as they are.
 - More step options: `reasoning`, `sections: [{ title, body }]`, `sources: [{ title, url }]`, `description`, `text`.
 - How the receiving client shows it is up to WhatsApp. The field is meant for AI bot replies, so display on a normal account is not guaranteed.
