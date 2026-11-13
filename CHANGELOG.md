@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.14]
+- `sendMetaStep` fix: v1.1.13 showed a plain forwarded text without "View details". The message body is now a `richResponseMessage` wrapped in `botForwardedMessage` (Meta AI reply format), plus `botMetadata.progressIndicatorMetadata`.
+- Step edits are sent with `relayMessage` as a `botForwardedMessage` > `protocolMessage` (`MESSAGE_EDIT`), the same way as richMessage edits.
+
 ## [1.1.13]
 - `sendMetaStep` fix: v1.1.12 messages did not show up on the receiver. The message is no longer wrapped in `botForwardedMessage`; it is now an `extendedTextMessage` with the AI bot forwarded `contextInfo` (`forwardedAiBotMessageInfo`, `forwardOrigin: 4`) plus `botMetadata.progressIndicatorMetadata`.
 - Step edits go through `sendMessage({ edit })`, so the stanza has the `edit="1"` attribute (missing in v1.1.12).
